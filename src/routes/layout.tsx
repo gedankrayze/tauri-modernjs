@@ -1,4 +1,7 @@
-export default ()=>{
+import '@/global.less';
 
-    return <div>Hi there</div>
+export default () =>
+{
+
+    return <div>Hi there</div>;
 }
