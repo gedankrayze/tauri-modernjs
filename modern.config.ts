@@ -4,7 +4,7 @@ import {appTools, defineConfig} from '@modern-js/app-tools';
 export default defineConfig({
     source: {
         globalVars: {
-            'APP_NAME': 'KanapesIDE',
+            'APP_NAME': 'Tauri ModernJS',
         }
     },
     runtime: {
@@ -21,9 +21,31 @@ export default defineConfig({
                 javascriptEnabled: true
             },
             sourceMap: false
+        },
+        rspack: {
+            optimization: {
+                splitChunks: {
+                    chunks: 'all',
+                    cacheGroups: {
+                        vendor: {
+                            test: /[\\/]node_modules[\\/]/,
+                            name: 'vendors',
+                            chunks: 'all'
+                        }
+                    }
+                }
+            }
         }
     },
     output: {
         disableCssModuleExtension: true,
+        distPath: {
+            root: 'dist'
+        }
+    },
+    performance: {
+        chunkSplit: {
+            strategy: 'split-by-experience'
+        }
     }
 });

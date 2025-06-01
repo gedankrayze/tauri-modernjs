@@ -1,0 +1,107 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ published ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - name: 'linux-x86_64'
+            os: 'ubuntu-latest'
+            target: 'x86_64-unknown-linux-gnu'
+          - name: 'windows-x86_64'
+            os: 'windows-latest'
+            target: 'x86_64-pc-windows-msvc'
+          - name: 'macos-x86_64'
+            os: 'macos-latest'
+            target: 'x86_64-apple-darwin'
+          - name: 'macos-aarch64'
+            os: 'macos-latest'
+            target: 'aarch64-apple-darwin'
+
+    runs-on: ${{ matrix.platform.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies (Ubuntu only)
+        if: matrix.platform.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform.target }}
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install frontend dependencies
+        run: bun install
+
+      - name: Build the app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: --target ${{ matrix.platform.target }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform.name }}
+          path: |
+            src-tauri/target/${{ matrix.platform.target }}/release/bundle/
+            !src-tauri/target/${{ matrix.platform.target }}/release/bundle/**/*.dSYM/
+
+  release:
+    if: github.event_name == 'release'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create release assets
+        run: |
+          cd artifacts
+          for dir in */; do
+            platform=${dir%/}
+            cd "$dir"
+            if [ "$platform" = "windows-x86_64" ]; then
+              find . -name "*.msi" -o -name "*.exe" | head -10 | tar -czf "../${platform}.tar.gz" -T -
+            elif [ "$platform" = "linux-x86_64" ]; then
+              find . -name "*.deb" -o -name "*.AppImage" | head -10 | tar -czf "../${platform}.tar.gz" -T -
+            else
+              find . -name "*.dmg" -o -name "*.app" | head -10 | tar -czf "../${platform}.tar.gz" -T -
+            fi
+            cd ..
+          done
+
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: artifacts/*.tar.gz

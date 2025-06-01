@@ -7,8 +7,8 @@
   "scripts": {
     "dev": "modern dev",
     "build": "modern build",
-    "tauri": "tauri",
-    "tauri:dev": "tauri dev"
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "dependencies": {
     "@modern-js/runtime": "^2.67.7",

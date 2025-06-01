@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    kanapeside_lib::run()
+    tauri_modernjs_lib::run()
 }
