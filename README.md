@@ -4,21 +4,17 @@ A production-ready template for building cross-platform desktop applications usi
 
 ## Features
 
-- **Cross-Platform**: Build for Windows, macOS (Intel & Apple Silicon), and Linux
-- **Modern Frontend**: React 19 with Modern.js framework
-- **Fast Bundling**: Rspack for lightning-fast builds
-- **Type Safety**: Full TypeScript support
-- **Styling**: LESS with CSS modules disabled for flexibility
-- **State Management**: Zustand for lightweight state management
-- **Icons**: Lucide React for beautiful icons
-- **CI/CD**: GitHub Actions workflow for automated builds
-- **Optimized Builds**: Production-ready with code splitting and LTO
+- **Ant Design desktop shell**: Responsive header, sidebar navigation, and content area styled with custom LESS tokens.
+- **Stateful Modern.js route**: Zustand drives the sidebar state and persists the latest Rust greeting for a real desktop workflow.
+- **Realtime context**: A Day.js-powered clock and Lucide React icons provide live status cues.
+- **Rust ↔ React example**: Trigger the bundled `greet` Tauri command directly from the UI to verify the round trip.
+- **Cross-platform ready**: Build for Windows, macOS (Intel & Apple Silicon), and Linux with the provided Modern.js + Tauri toolchain.
 
 ## Tech Stack
 
 ### Frontend
 - **Framework**: Modern.js v2.67.7
-- **UI Library**: React 19
+- **UI Library**: React 19 + Ant Design 5
 - **Bundler**: Rspack (configurable to Webpack)
 - **Styling**: LESS
 - **State Management**: Zustand
@@ -54,8 +50,11 @@ cd tauri-modernjs
 ### 2. Install Dependencies
 
 ```bash
-# Install frontend dependencies
+# Install frontend dependencies with Bun (recommended)
 bun install
+
+# or with npm
+npm install
 
 # Install Rust dependencies (handled automatically by Tauri)
 ```
@@ -63,8 +62,11 @@ bun install
 ### 3. Development
 
 ```bash
-# Start development server
+# Start development server with Bun
 bun run tauri:dev
+
+# or using npm
+npm run tauri:dev
 ```
 
 This will:
@@ -75,16 +77,34 @@ This will:
 ### 4. Build for Production
 
 ```bash
-# Build the application
+# Build the application with Bun
 bun run tauri:build
+
+# or using npm
+npm run tauri:build
+```
+
+### 5. Trigger the Rust greet command
+
+Launch the desktop app and click **Run greet** in the header to call the `greet` Tauri command. The response is stored in the
+shared Zustand store and rendered in the "Latest activity" card.
+
+Prefer to call it manually? The UI uses the same helper you can reuse elsewhere:
+
+```ts
+import {invoke} from '@tauri-apps/api/core';
+
+const message = await invoke<string>('greet', {name: 'Modern.js Developer'});
 ```
 
 ## Available Scripts
 
-- `bun run dev` - Start Modern.js development server only
-- `bun run build` - Build frontend for production
-- `bun run tauri:dev` - Start Tauri development mode
-- `bun run tauri:build` - Build Tauri application for production
+Run scripts with either Bun (`bun run <script>`) or npm (`npm run <script>`):
+
+- `dev` - Start the Modern.js development server only.
+- `build` - Build the frontend for production.
+- `tauri:dev` - Start the integrated Tauri development mode.
+- `tauri:build` - Bundle the desktop application for production.
 
 ## Project Structure
 
@@ -98,6 +118,8 @@ tauri-modernjs/
 ├── src/
 │   ├── routes/
 │   │   └── layout.tsx        # Main layout component
+│   ├── stores/
+│   │   └── appStore.ts       # Shared Zustand state
 │   ├── global.d.ts           # Global TypeScript declarations
 │   ├── global.less           # Global styles
 │   └── modern-app-env.d.ts   # Modern.js environment types
