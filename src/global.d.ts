@@ -23,4 +23,7 @@ declare module '*.styl' {
     export default classes;
 }
 
-declare const APP_NAME:string;
+/**
+ * Global application name injected by Modern.js configuration.
+ */
+declare const APP_NAME: string;
