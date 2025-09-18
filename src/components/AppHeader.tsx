@@ -1,4 +1,4 @@
-import { Button, Space, Tag, Typography, Dropdown } from 'antd';
+import { Button, Space, Tag, Typography, Dropdown, Flex } from 'antd';
 import type { MenuProps } from 'antd';
 import {
   CalendarDays,
@@ -41,8 +41,22 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onGreet, loadingGreeting }
   ];
 
   return (
-    <div className="app-header">
-      <div className="app-header__left">
+    <Flex
+      className="app-header"
+      align="center"
+      justify="space-between"
+      style={{
+        height: '64px',
+        padding: '0 24px',
+        backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        flexShrink: 0
+      }}
+    >
+      <Flex align="center" gap="middle">
         <Button
           aria-label="Toggle sidebar"
           className="app-header__toggle"
@@ -53,7 +67,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onGreet, loadingGreeting }
         <Typography.Title level={5} className="app-header__title">
           Tauri ModernJS
         </Typography.Title>
-      </div>
+      </Flex>
 
       <Space size="middle" align="center">
         <Tag
@@ -85,6 +99,6 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onGreet, loadingGreeting }
           Run greet
         </Button>
       </Space>
-    </div>
+    </Flex>
   );
 };

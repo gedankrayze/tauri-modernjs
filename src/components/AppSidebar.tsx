@@ -1,4 +1,4 @@
-import { Layout, Menu, Typography } from 'antd';
+import {Flex, Layout, Menu, Typography} from 'antd';
 import type { MenuProps } from 'antd';
 import {
   MonitorCog,
@@ -67,9 +67,9 @@ export const AppSidebar: React.FC = () => {
       theme="dark"
     >
       <div className="app-logo">
-        <div className="app-logo__icon">
+        <Flex align={'center'} justify={'center'} style={{paddingTop: '1rem'}}>
           <Rocket size={collapsed ? 28 : 24} strokeWidth={2.4} />
-        </div>
+        </Flex>
         {!collapsed && (
           <div className="app-logo__content">
             <Typography.Title level={5} className="app-logo__title">

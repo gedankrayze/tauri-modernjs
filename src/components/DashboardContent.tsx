@@ -1,4 +1,4 @@
-import { Card, Space, Typography, List, Row, Col, Statistic, Progress } from 'antd';
+import { Card, Space, Typography, List, Row, Col, Statistic, Progress, Flex } from 'antd';
 import {
   BellRing,
   CheckCircle2,
@@ -108,11 +108,11 @@ export const DashboardContent: React.FC = () => {
           {stats.map((stat, index) => (
             <Col xs={24} sm={12} lg={6} key={index}>
               <Card className="stat-card" style={{height: '100%'}}>
-                <div className="stat-card__content">
-                  <div className="stat-card__icon" style={{ color: stat.color }}>
+                <Flex align="center" gap="middle">
+                  <Flex align="center" justify="center" style={{ color: stat.color }}>
                     {stat.icon}
-                  </div>
-                  <div className="stat-card__data">
+                  </Flex>
+                  <Flex vertical flex={1}>
                     <Statistic
                       title={stat.title}
                       value={stat.value}
@@ -121,12 +121,12 @@ export const DashboardContent: React.FC = () => {
                       valueStyle={{ fontSize: '24px', fontWeight: 700 }}
                     />
                     {stat.trend && (
-                      <div className={`stat-trend ${stat.trend > 0 ? 'positive' : 'negative'}`}>
+                      <Flex className={`stat-trend ${stat.trend > 0 ? 'positive' : 'negative'}`}>
                         {stat.trend > 0 ? '↗' : '↘'} {Math.abs(stat.trend)}%
-                      </div>
+                      </Flex>
                     )}
-                  </div>
-                </div>
+                  </Flex>
+                </Flex>
               </Card>
             </Col>
           ))}
@@ -153,7 +153,7 @@ export const DashboardContent: React.FC = () => {
                 renderItem={(item) => (
                   <List.Item key={item.key} className="feature-item">
                     <List.Item.Meta
-                      avatar={<div className="feature-icon">{item.icon}</div>}
+                      avatar={<Flex className="feature-icon" align="center" justify="center">{item.icon}</Flex>}
                       title={<Typography.Text strong>{item.title}</Typography.Text>}
                       description={item.description}
                     />
@@ -174,17 +174,17 @@ export const DashboardContent: React.FC = () => {
                   </Space>
                 }
               >
-                <div className="activity-content">
-                  <div className="activity-icon">
+                <Flex align="flex-start" gap="middle">
+                  <Flex align="center" justify="center">
                     <CheckCircle2 size={24} strokeWidth={2.6} />
-                  </div>
-                  <div className="activity-details">
+                  </Flex>
+                  <Flex vertical flex={1}>
                     <Typography.Text strong>Rust Command Response</Typography.Text>
                     <Typography.Paragraph className="activity-message">
                       {lastGreeting || 'Click "Run greet" to test the Rust integration and see the response here.'}
                     </Typography.Paragraph>
-                  </div>
-                </div>
+                  </Flex>
+                </Flex>
               </Card>
 
               <Card title="System Health" className="health-card">
