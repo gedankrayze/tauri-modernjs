@@ -31,12 +31,16 @@ const AppLayout: React.FC = () => {
 
     return (
         <ThemeProvider>
-            <Layout className="app-layout">
+            <Layout className="app-layout" style={{ height: '100vh' }}>
                 {contextHolder}
                 <AppSidebar />
-                <Layout>
+                <Layout style={{ height: '100vh', padding: '2rem' }}>
                     <AppHeader onGreet={handleGreet} loadingGreeting={loadingGreeting} />
-                    <Content className="app-content">
+                    <Content style={{
+                        height: 'calc(100vh - 64px)',
+                        overflowY: 'auto',
+                        overflowX: 'hidden'
+                    }}>
                         <DashboardContent />
                     </Content>
                 </Layout>

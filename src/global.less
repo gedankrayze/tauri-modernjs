@@ -1,12 +1,18 @@
+/* ==========================================================================
+   FOUNDATION - Fonts, Variables, Base Styles
+   ========================================================================== */
+
 @import (css) url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
+  /* Dark Theme Colors */
   --app-bg-dark: #050b18;
   --app-surface-dark: #0d162b;
   --app-border-dark: rgba(148, 163, 184, 0.16);
   --app-text-dark: #f8fafc;
   --app-muted-dark: #94a3b8;
 
+  /* Light Theme Colors */
   --app-bg-light: #ffffff;
   --app-surface-light: #f8fafc;
   --app-border-light: #e2e8f0;
@@ -21,11 +27,24 @@
 html,
 body {
   margin: 0;
-  height: 100%;
+  padding: 0;
+  height: 100vh;
+  width: 100%;
   font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.3s ease;
+  overflow: hidden;
 }
+
+#root {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   THEME SWITCHING - Dark/Light Mode
+   ========================================================================== */
 
 [data-theme='dark'] {
   background: radial-gradient(circle at top, rgba(30, 64, 175, 0.35), transparent 45%),
@@ -39,92 +58,44 @@ body {
   color: var(--app-text-light);
 }
 
-#root,
+/* ==========================================================================
+   LAYOUT STRUCTURE - App Layout, Sidebar, Header, Content
+   ========================================================================== */
+
 .app-layout {
-  min-height: 100vh;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
 }
 
-.app-layout .ant-layout,
-.app-layout .ant-layout-sider,
+.app-layout .ant-layout {
+  background: transparent;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-layout .ant-layout-sider {
+  background: transparent;
+  height: 100vh;
+  flex-shrink: 0;
+}
+
 .app-layout .ant-layout-header {
   background: transparent;
+  height: 64px;
+  flex-shrink: 0;
 }
 
+/* Sidebar */
 .app-sider {
   padding: 16px 12px;
   display: flex;
   flex-direction: column;
   position: relative;
+  height: 100vh !important;
 }
 
-.app-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 8px 24px;
-  margin-bottom: 8px;
-}
-
-.app-logo__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  color: white;
-  flex-shrink: 0;
-}
-
-.app-logo__content {
-  flex: 1;
-  min-width: 0;
-}
-
-.app-logo__title {
-  margin: 0 !important;
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  line-height: 1.2 !important;
-}
-
-.app-logo__subtitle {
-  font-size: 12px !important;
-  opacity: 0.7;
-  margin: 0 !important;
-}
-
-.app-menu {
-  flex: 1;
-  border: none !important;
-}
-
-.app-sider__footer {
-  margin-top: auto;
-  padding: 16px 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.app-sider__status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.status-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #10b981;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
+/* Header */
 .app-header {
   display: flex;
   align-items: center;
@@ -136,183 +107,56 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
+  flex-shrink: 0;
 }
 
-.app-header__left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+/* Content Area */
+main.ant-layout-content {
+  height: calc(100vh - 64px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 
-.app-header__toggle,
-.app-header__theme-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  transition: all 0.2s ease;
-}
-
-.app-header__toggle:hover,
-.app-header__theme-toggle:hover {
-  background: rgba(59, 130, 246, 0.08) !important;
-  color: #3b82f6 !important;
-}
-
-.app-header__title {
-  margin: 0 !important;
-  font-size: 18px !important;
-  font-weight: 700 !important;
-}
-
-.app-header__clock {
-  font-weight: 600;
-  border-radius: 20px;
-  border: none;
-  padding: 6px 12px;
-  font-size: 12px;
-}
-
-.app-content {
-  padding: 32px;
-  background: transparent;
-  min-height: calc(100vh - 64px);
-}
-
+/* Dashboard Content */
 .dashboard-content {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0;
+  min-height: 100%;
 }
 
-.stat-card {
+/* ==========================================================================
+   COMPONENTS - Stats Cards, Feature Cards, etc.
+   ========================================================================== */
+
+/* Stats Cards - Equal Height Fix */
+.dashboard-content .ant-row {
+  align-items: stretch;
+}
+
+.dashboard-content .ant-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-content .ant-row .ant-col .ant-card.ant-card-bordered.stat-card {
   border-radius: 16px !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100% !important;
+  min-height: 140px !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
-.stat-card:hover {
+.dashboard-content .ant-row .ant-col .ant-card.ant-card-bordered.stat-card .ant-card-body {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  min-height: 100px !important;
+}
+
+.dashboard-content .ant-row .ant-col .ant-card.ant-card-bordered.stat-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15) !important;
-}
-
-.stat-card__content {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.stat-card__icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(59, 130, 246, 0.08);
-  flex-shrink: 0;
-}
-
-.stat-card__data {
-  flex: 1;
-}
-
-.stat-trend {
-  font-size: 12px;
-  font-weight: 600;
-  margin-top: 4px;
-}
-
-.stat-trend.positive {
-  color: #10b981;
-}
-
-.stat-trend.negative {
-  color: #ef4444;
-}
-
-.feature-card,
-.activity-card,
-.health-card {
-  border-radius: 18px !important;
-  backdrop-filter: blur(8px);
-  transition: transform 0.2s ease;
-}
-
-.feature-card:hover,
-.activity-card:hover,
-.health-card:hover {
-  transform: translateY(-1px);
-}
-
-.feature-list .ant-list-item {
-  padding: 16px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.feature-list .ant-list-item:last-child {
-  border-bottom: none;
-}
-
-.feature-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
-  color: #3b82f6;
-  flex-shrink: 0;
-}
-
-.activity-content {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-}
-
-.activity-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
-  color: #10b981;
-  flex-shrink: 0;
-}
-
-.activity-details {
-  flex: 1;
-  min-width: 0;
-}
-
-.activity-message {
-  margin: 8px 0 0 0 !important;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.health-card .ant-progress-line {
-  margin-bottom: 16px;
-}
-
-.health-card .ant-progress-line:last-child {
-  margin-bottom: 0;
-}
-
-@media (max-width: 768px) {
-  .app-content {
-    padding: 16px;
-  }
-
-  .app-header {
-    padding: 0 16px;
-  }
-
-  .dashboard-content .ant-col {
-    margin-bottom: 16px;
-  }
 }

@@ -107,7 +107,7 @@ export const DashboardContent: React.FC = () => {
         <Row gutter={[24, 24]}>
           {stats.map((stat, index) => (
             <Col xs={24} sm={12} lg={6} key={index}>
-              <Card className="stat-card">
+              <Card className="stat-card" style={{height: '100%'}}>
                 <div className="stat-card__content">
                   <div className="stat-card__icon" style={{ color: stat.color }}>
                     {stat.icon}
