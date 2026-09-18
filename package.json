@@ -24,7 +24,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
-    "@modern-js/app-tools": "^2.68.14",
+    "@modern-js/app-tools": "^3.0.0",
     "@modern-js/tsconfig": "^2.68.14",
     "@tauri-apps/cli": "^2.8.4",
     "@types/react": "^19.1.13",
