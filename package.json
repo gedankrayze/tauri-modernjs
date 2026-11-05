@@ -16,7 +16,7 @@
     "@modern-js/runtime": "^2.68.14",
     "@tauri-apps/api": "^2.8.0",
     "@tauri-apps/plugin-opener": "^2.5.0",
-    "antd": "^5.27.4",
+    "antd": "^6.0.0",
     "dayjs": "^1.11.18",
     "lucide-react": "^0.544.0",
     "react": "^19.1.1",
